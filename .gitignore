@@ -1,0 +1,9 @@
+mariadb/data/
+postgres/postgres/
+owncloud/owncloud_data/
+redis/redis-data/
+mongo/mongo-data/
+nginx/html/
+tests/
+mssql/load-data/
+vault/data/.env-vietnamese-cadastral

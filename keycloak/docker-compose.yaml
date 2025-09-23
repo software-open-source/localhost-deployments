@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: ${KC_DB_URL}
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_USERNAME}
+    ports:
+      - 8010:8080
+    command:
+      - start-dev
+    # networks:
+    #   - keycloak
+    restart: always
+
+# networks:
+#   keycloak:
+#     name: postgres_postgres
+#     external: true

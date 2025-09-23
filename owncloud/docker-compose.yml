@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  owncloud:
+    image: owncloud/server:latest
+    container_name: owncloud
+    ports:
+      - "8085:8080"
+    environment:
+      - OWNCLOUD_DOMAIN=${OWNCLOUD_DOMAIN}
+      - OWNCLOUD_ADMIN_USERNAME=${OWNCLOUD_ADMIN_USERNAME}
+      - OWNCLOUD_ADMIN_PASSWORD=${OWNCLOUD_ADMIN_PASSWORD}
+      - OWNCLOUD_DB_TYPE=pgsql
+      - OWNCLOUD_DB_NAME=${OWNCLOUD_DB_NAME}
+      - OWNCLOUD_DB_USERNAME=${OWNCLOUD_DB_USERNAME}
+      - OWNCLOUD_DB_PASSWORD=${OWNCLOUD_DB_PASSWORD}
+      - OWNCLOUD_DB_HOST=${OWNCLOUD_DB_HOST}
+    volumes:
+      - ./owncloud_data:/mnt/data
+    restart: always
+
+volumes:
+  owncloud_data:
+  db_data:

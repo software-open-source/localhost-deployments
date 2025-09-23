@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  ibm-mq:
+    image: icr.io/ibm-messaging/mq:latest
+    container_name: ibm-mq-server
+    hostname: ibm-mq-host
+    
+    environment:
+      LICENSE: accept
+      MQ_QMGR_NAME: QM1
+      MQ_APP_PASSWORD: passw0rd123
+      MQ_ADMIN_PASSWORD: admin123
+      MQ_DEV: true
+      MQ_ENABLE_METRICS: true
+      
+    ports:
+      - "1414:1414"
+      - "9443:9443"
+      - "9080:9080"
+      
+    volumes:
+      # Sử dụng named volumes thay vì bind mounts
+      - mq-data:/mnt/mqm
+      - mq-logs:/var/mqm/logs
+      # Cấu hình MQSC (nếu cần)
+      - ./mqsc:/etc/mqm/mqsc:ro
+      
+    networks:
+      - mq-network
+      
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    healthcheck:
+      test: ["CMD", "dspmq", "-m", "QM1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+volumes:
+  mq-data:
+  mq-logs:
+
+networks:
+  mq-network:
+    driver: bridge

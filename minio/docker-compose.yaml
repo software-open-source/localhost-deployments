@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: always
+    ports:
+      - "8011:9000"      # MinIO API
+      - "8012:9001"      # MinIO Console (Web UI)
+    environment:
+      # Thông tin đăng nhập MinIO (được load từ file .env)
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      # Cấu hình console
+      MINIO_BROWSER_REDIRECT_URL: ${MINIO_BROWSER_REDIRECT_URL}
+    volumes:
+      # Lưu trữ dữ liệu MinIO
+      - minio_data:/data
+      # Mount thư mục local (tùy chọn)
+      # - ./data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - minio-network
+
+  # Tùy chọn: MinIO Client (mc) để quản lý
+  minio-client:
+    image: minio/mc:latest
+    container_name: minio-client
+    restart: always
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      /usr/bin/mc config host add myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb myminio/test-bucket --ignore-existing;
+      /usr/bin/mc policy set public myminio/test-bucket;
+      echo 'MinIO setup completed';
+      tail -f /dev/null
+      "
+    networks:
+      - minio-network
+
+volumes:
+  minio_data:
+    driver: local
+
+networks:
+  minio-network:
+    driver: bridge

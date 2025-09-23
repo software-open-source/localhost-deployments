@@ -1,0 +1,13 @@
+version: '3.9'
+volumes:
+  data:
+services:
+  db:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
