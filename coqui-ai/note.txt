@@ -1,1 +1,0 @@
-echo token | docker login ghcr.io -u richard-vu --password-stdin

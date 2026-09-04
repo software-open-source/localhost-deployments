@@ -1,0 +1,17 @@
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/free:latest
+    container_name: oracle-db
+    restart: always
+    ports:
+      - "${ORACLE_PORT}:1521"
+    environment:
+      ORACLE_PWD: ${ORACLE_PASSWORD}
+      ORACLE_CHARACTERSET: ${ORACLE_CHARACTERSET}
+      ENABLE_ARCHIVELOG: ${ENABLE_ARCHIVELOG}
+      ENABLE_FORCE_LOGGING: ${ENABLE_FORCE_LOGGING}
+    volumes:
+      - ./data:/opt/oracle/oradata
+
+volumes:
+  data:

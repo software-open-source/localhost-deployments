@@ -1,0 +1,28 @@
+services:
+  loki:
+    image: docker.io/grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      # Mount file cấu hình từ máy MX Linux vào container
+      - ./loki-config.yaml:/mnt/config/loki-config.yaml
+    command: -config.file=/mnt/config/loki-config.yaml
+    restart: unless-stopped
+    networks:
+      - monitoring
+
+  grafana:
+    image: docker.io/grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3101:3000"
+    restart: unless-stopped
+    networks:
+      - monitoring
+    depends_on:
+      - loki
+
+networks:
+  monitoring:
+    driver: bridge

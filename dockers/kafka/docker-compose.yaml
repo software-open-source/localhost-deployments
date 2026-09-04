@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  kafka-native:
+    image: ${KAFKA_IMAGE:-apache/kafka-native:latest}
+    container_name: kafka-native
+    ports:
+      - "${KAFKA_PORT:-9092}:9092"
+    environment:
+      - KAFKA_NODE_ID=${KAFKA_NODE_ID}
+      - KAFKA_PROCESS_ROLES=${KAFKA_PROCESS_ROLES}
+      - KAFKA_LISTENERS=${KAFKA_LISTENERS}
+      - KAFKA_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS}
+      - KAFKA_CONTROLLER_LISTENER_NAMES=${KAFKA_CONTROLLER_LISTENER_NAMES}
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=${KAFKA_CONTROLLER_QUORUM_VOTERS}
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=${KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR}
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=${KAFKA_TRANSACTION_STATE_LOG_MIN_ISR}
+      - CLUSTER_ID=${CLUSTER_ID}
+    restart: unless-stopped
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  kafka-data:
+    driver: local

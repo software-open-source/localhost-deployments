@@ -1,0 +1,16 @@
+
+services:
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: libretranslate
+    ports:
+      - "5000:5000"
+    environment:
+      - BACKEND=argos
+      - ARGOS_LANGUAGE_PAIRS=vi-en,en-vi
+    volumes:
+      - ./data:/home/libretranslate/.local/share/argos-translate
+    restart: unless-stopped
+
+volumes:
+  data:

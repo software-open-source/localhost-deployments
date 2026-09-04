@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault
+  namespace: vault-local
+  labels:
+    app: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+        - name: vault
+          image: hashicorp/vault:latest
+          # Chạy Vault ở chế độ dev để khởi động nhanh, không cần init/unseal
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              vault server -config=/vault/config/vault-config.hcl
+          ports:
+            - name: http
+              containerPort: 8200
+
+          # ============ CPU & RAM ============
+          resources:
+            requests: # mức tối thiểu K8s "để dành" cho container
+              cpu: "250m" # 250m = 0.25 nhân CPU
+              memory: "256Mi" # 256Mi = 256 MiB RAM
+            limits: # trần tối đa, vượt RAM sẽ bị OOMKill
+              cpu: "500m"
+              memory: "512Mi"
+
+          # ============ Cách 1: lấy từng key vào env ============
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: APP_ENV
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: password
+            - name: VAULT_ADDR
+              value: "https://127.0.0.1:8200"
+            - name: VAULT_CACERT
+              value: "/vault/tls/ca.crt"
+          volumeMounts:
+            - name: vault-data
+              mountPath: /vault/data
+            - name: vault-config
+              mountPath: /vault/config
+              readOnly: true
+            - name: vault-tls
+              mountPath: /vault/tls
+              readOnly: true
+      volumes:
+        - name: vault-data
+          persistentVolumeClaim:
+            claimName: pvc1
+        - name: vault-config
+          configMap:
+            name: app-config
+            items:
+              - key: vault-config.hcl
+                path: vault-config.hcl
+        - name: vault-tls
+          secret:
+            secretName: vault-tls

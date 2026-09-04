@@ -1,0 +1,14 @@
+# docker-compose.yml
+
+
+services:
+  app:
+    image: docuseal/docuseal:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./docuseal:/data/docuseal
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@host.docker.internal:5432/docuseal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

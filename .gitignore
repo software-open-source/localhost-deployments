@@ -1,5 +1,4 @@
 mariadb/data/
-postgres/postgres/
 owncloud/owncloud_data/
 redis/redis-data/
 mongo/mongo-data/
@@ -7,3 +6,20 @@ nginx/html/
 tests/
 mssql/load-data/
 vault/data/.env-vietnamese-cadastral
+kafka/kafka-data/
+docuseal/docuseal/
+source/
+extension/
+**/cache/
+
+# Common
+**/data/
+**/tls/
+**/.env
+**/**.log
+
+# vault
+k8s/vault-local/.vault-local-cluster.generated.yaml
+k8s/vault-local/.vault-local-service.generated.yaml
+k8s/vault-local/vault-keys.txt
+dockers/immich-app/library/

@@ -1,0 +1,34 @@
+services:
+  master:
+    image: chrislusf/seaweedfs:${SEAWEEDFS_VERSION:-latest}
+    ports:
+      - "${MASTER_PORT:-9333}:9333"
+    command: "master -ip=master"
+    restart: always
+
+  volume:
+    image: chrislusf/seaweedfs:${SEAWEEDFS_VERSION:-latest}
+    ports:
+      - "${VOLUME_PORT:-8081}:8081"
+    # mserver luôn trỏ đến cổng nội bộ 9333 của master, không phụ thuộc vào cổng host mapping
+    command: "volume -mserver=master:9333 -port=8081"
+    depends_on:
+      - master
+    restart: always
+
+  filer:
+    image: chrislusf/seaweedfs:${SEAWEEDFS_VERSION:-latest}
+    ports:
+      - "${FILER_PORT:-8888}:8888"
+      - "${S3_PORT:-8333}:8333"
+    # Sử dụng shell mặc định để chạy lệnh khởi tạo file s3.json từ biến môi trường
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        echo '{"identities":[{"name":"admin","credentials":[{"accessKey":"${S3_ACCESS_KEY}","secretKey":"${S3_SECRET_KEY}"}],"actions":["Admin","Read","Write","List","Tagging"]}]}' > /tmp/s3.json
+        weed filer -master="master:9333" -s3 -s3.config=/tmp/s3.json
+    depends_on:
+      - master
+      - volume
+    restart: always
