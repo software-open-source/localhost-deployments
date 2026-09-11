@@ -1,0 +1,47 @@
+
+
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mifosplatform-tenants
+      MYSQL_USER: mifos
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  fineract:
+    image: openmf/fineract:1.8.0  # hoặc latest
+    depends_on:
+      - mysql
+    environment:
+      FINERACT_DB_HOST: mysql
+      FINERACT_DB_PORT: 3306
+      FINERACT_DB_NAME: mifosplatform-tenants
+      FINERACT_DB_USERNAME: mifos
+      FINERACT_DB_PASSWORD: password
+      FINERACT_TENANTDB_HOST: mysql
+      FINERACT_TENANTDB_PORT: 3306
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/fineract-provider/api/v1/tenants"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  community-app:
+    image: openmf/community-app:1.8.0
+    ports:
+      - "3000:80"
+    environment:
+      API_BASE_URL: http://localhost:8080/fineract-provider/api/v1
+    depends_on:
+      - fineract
+
+volumes:
+  mysql_data:
+  

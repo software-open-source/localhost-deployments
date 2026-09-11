@@ -1,0 +1,9 @@
+services:
+  memos:
+    image: neosmemo/memos:stable
+    environment:
+      - MEMOS_DRIVER=${MEMOS_DRIVER}
+      - MEMOS_DSN=${MEMOS_DSN}
+    ports:
+      - "45230:5230"
+    restart: always

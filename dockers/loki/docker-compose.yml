@@ -1,0 +1,22 @@
+# docker-compose.loki.yml
+services:
+  loki:
+    image: docker.io/grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/mnt/config/loki-config.yaml
+    command: -config.file=/mnt/config/loki-config.yaml
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - S3_ACCESS_KEY=${S3_ACCESS_KEY}
+      - S3_SECRET_KEY=${S3_SECRET_KEY}
+    networks:
+      - loki
+
+networks:
+  loki:
+    driver: bridge

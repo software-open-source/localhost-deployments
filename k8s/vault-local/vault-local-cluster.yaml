@@ -1,0 +1,13 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: vault-local
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30443 # NODE_PORT — script thay theo .env
+        hostPort: 8443 # HOST_PORT — script thay theo .env
+        protocol: TCP
+  - role: worker
+    extraMounts:
+      - hostPath: /tmp/vault-local-data # HOST_DATA_DIR — script thay bằng $(pwd)/data
+        containerPath: /data # trong node

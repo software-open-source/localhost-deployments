@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: vault-local
+data:
+  # key-value đơn giản (value PHẢI là string, số cũng phải bỏ ngoặc kép)
+  APP_ENV: "production"
+  LOG_LEVEL: "debug"
+
+  # hoặc nhét cả một file cấu hình vào một key (dùng |  cho multi-line)
+  vault-config.hcl: |
+    ui = true
+    disable_mlock = true
+
+    storage "file" {
+      path = "/vault/data"          # dữ liệu ghi vào PVC → về thư mục data trên host
+    }
+
+    listener "tcp" {
+      address       = "0.0.0.0:8200"
+      tls_cert_file = "/vault/tls/tls.crt"
+      tls_key_file  = "/vault/tls/tls.key"
+    }

@@ -1,0 +1,39 @@
+auth_enabled: true
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9096
+
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /tmp/loki
+  storage:
+    s3:
+      endpoint: host.docker.internal:8333 # Trỏ đến port S3 của SeaweedFS trên host
+      access_key_id: ${S3_ACCESS_KEY} # Thay bằng Access Key của bạn (hoặc hardcode)
+      secret_access_key: ${S3_SECRET_KEY} # Thay bằng Secret Key của bạn
+      region: local
+      s3forcepathstyle: true # Bắt buộc với SeaweedFS/MinIO
+      insecure: true # Vì SeaweedFS S3 thường chạy HTTP
+      bucketnames: loki-data # Tên bucket lưu trữ data của Loki
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 100
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: tsdb
+      object_store: s3 # Đổi từ filesystem sang s3
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h

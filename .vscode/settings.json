@@ -1,0 +1,16 @@
+{
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": false,
+  "editor.rulers": [
+    120
+  ],
+  "editor.wordWrap": "off",
+  "editor.wordWrapColumn": 120,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
+}

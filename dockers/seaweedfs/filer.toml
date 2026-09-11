@@ -1,0 +1,9 @@
+# filer.toml
+[postgres]
+enabled = true
+hostname = "host.docker.internal"
+port = 5432
+database = "seaweedfs_db"
+username = "postgres"      # Thay bằng user postgres của bạn
+password = "postgres"  # Thay bằng password postgres của bạn
+sslmode = "disable"
