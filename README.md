@@ -29,6 +29,8 @@ docker rm $(docker ps -aq)
 Xóa sạch toàn bộ image, volume, network và build cache rác.
 
 ```bash
+docker builder prune -f
+docker image prune -a -f
 docker system prune -a --volumes -f
 docker volume rm $(docker volume ls -q)
 ```
