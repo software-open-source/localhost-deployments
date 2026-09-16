@@ -1,16 +1,31 @@
+# https://github.com/LibreTranslate/
 
 services:
   libretranslate:
-    image: libretranslate/libretranslate:latest
     container_name: libretranslate
+    image: libretranslate/libretranslate:latest-cuda
     ports:
       - "5000:5000"
-    environment:
-      - BACKEND=argos
-      - ARGOS_LANGUAGE_PAIRS=vi-en,en-vi
-    volumes:
-      - ./data:/home/libretranslate/.local/share/argos-translate
     restart: unless-stopped
+    environment:
+      - ARGOS_LANGUAGE_PAIRS=vi-en,en-vi
+      - BACKEND=argos
+      - LT_API_KEYS_DB_PATH=/app/db/api_keys.db
+      - LT_API_KEYS=true
+      - LT_REQ_LIMIT=120
+      - LT_UPDATE_MODELS=true
+      - LT_DEBUG=true
+      - PUID=root
+    volumes:
+      - ./data/db:/app/db
+      - ./data/models:/root/.local
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     networks:
       - libretranslate
 
