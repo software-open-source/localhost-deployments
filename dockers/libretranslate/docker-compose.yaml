@@ -6,7 +6,7 @@ services:
     image: libretranslate/libretranslate:latest-cuda
     ports:
       - "5000:5000"
-    restart: unless-stopped
+    restart: always
     environment:
       - ARGOS_LANGUAGE_PAIRS=vi-en,en-vi
       - BACKEND=argos
