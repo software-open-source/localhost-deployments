@@ -12,7 +12,7 @@ services:
       - BACKEND=argos
       - LT_API_KEYS_DB_PATH=/app/db/api_keys.db
       - LT_API_KEYS=true
-      - LT_REQ_LIMIT=120
+      - LT_REQ_LIMIT=5000
       - LT_UPDATE_MODELS=true
       - LT_DEBUG=true
       - PUID=root
