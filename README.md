@@ -33,6 +33,7 @@ docker builder prune -f
 docker image prune -a -f
 docker system prune -a --volumes -f
 docker volume rm $(docker volume ls -q)
+docker compose up --no-build
 ```
 
 *Xác minh:* Lệnh sẽ in ra tổng dung lượng ổ đĩa vừa được giải phóng. Anh có thể kiểm tra lại tab Volumes trong VS Code hoặc chạy `docker volume ls` để xác nhận danh sách đã trống.
