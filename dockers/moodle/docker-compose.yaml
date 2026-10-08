@@ -1,0 +1,34 @@
+services:
+  moodle:
+    image: elestio/moodle:${SOFTWARE_VERSION_TAG}
+    container_name: moodle
+    restart: always
+
+    environment:
+      - MOODLE_DATABASE_TYPE=mariadb
+      - MOODLE_DATABASE_HOST=${MOODLE_DB_HOST}
+      - MOODLE_DATABASE_PORT_NUMBER=${MOODLE_DB_PORT}
+      - MOODLE_DATABASE_NAME=${MOODLE_DB_NAME}
+      - MOODLE_DATABASE_USER=${MOODLE_DB_USER}
+      - MOODLE_DATABASE_PASSWORD=${MOODLE_DB_PASSWORD}
+      - MOODLE_USERNAME=${MOODLE_USERNAME}
+      - MOODLE_PASSWORD=${MOODLE_PASSWORD}
+      - MOODLE_EMAIL=${MOODLE_EMAIL}
+      - MOODLE_SITE_NAME=${MOODLE_SITE_NAME}
+      - MOODLE_HOST=${MOODLE_HOST}
+
+      - MOODLE_REVERSEPROXY=false
+      - MOODLE_SSL_PROXY=false
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    ports:
+      - "8086:80"
+
+    volumes:
+      - ./data/moodledata:/var/moodledata
+
+networks:
+  default:
+    name: moodle_network
