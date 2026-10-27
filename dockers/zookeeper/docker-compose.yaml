@@ -1,0 +1,22 @@
+name: localhost
+
+services:
+  zookeeper:
+    image: ${ZOOKEEPER_IMAGE}
+    container_name: dolphinscheduler-zookeeper
+    restart: unless-stopped
+    ports:
+      - "${ZOOKEEPER_PORT}:2181"
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: ${ZOOKEEPER_ALLOW_ANONYMOUS_LOGIN}
+      ZOO_4LW_COMMANDS_WHITELIST: ${ZOOKEEPER_4LW_COMMANDS_WHITELIST}
+      TZ: ${TZ}
+    volumes:
+      - ./data/zookeeper:/bitnami/zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'cat < /dev/null > /dev/tcp/127.0.0.1/2181'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

@@ -1,0 +1,21 @@
+name: localhost
+
+services:
+  dolphinscheduler:
+    image: apache/dolphinscheduler-standalone-server:${DOLPHINSCHEDULER_VERSION:-3.2.1}
+    container_name: dolphinscheduler-standalone-server
+    restart: unless-stopped
+    
+    ports:
+      - "${DS_WEB_PORT:-12345}:12345"
+      - "${DS_GRPC_PORT:-25333}:25333"
+
+    volumes:
+      - ${DS_DATA_DIR:-./data/dolphinscheduler_data}:/opt/dolphinscheduler/data
+      - ${DS_DATA_DIR:-./data/dolphinscheduler_data}/logs:/opt/dolphinscheduler/logs
+
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'

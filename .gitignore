@@ -3,6 +3,10 @@ owncloud/owncloud_data/
 redis/redis-data/
 mongo/mongo-data/
 nginx/html/
+dockers/nginx/nginx/conf/generated/
+dockers/nginx/nginx-proxy-manager/data/
+dockers/nginx/nginx-proxy-manager/letsencrypt/
+dockers/nginx/nginx-proxy-manager/config/
 tests/
 mssql/load-data/
 vault/data/.env-vietnamese-cadastral

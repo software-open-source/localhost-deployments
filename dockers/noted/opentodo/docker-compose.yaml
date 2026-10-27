@@ -1,0 +1,13 @@
+name: localhost
+
+services:
+  opentodo:
+    image: ghcr.io/pixari/opentodo:latest
+    restart: always
+    ports:
+      - "9004:8080"
+    volumes:
+      - ./data:/data
+    healthcheck:
+      test: ["CMD", "/opentodo", "healthcheck"]
+      interval: 30s

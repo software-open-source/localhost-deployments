@@ -1,0 +1,15 @@
+name: localhost
+
+services:
+  zoo-navigator:
+    image: ${ZOONAVIGATOR_IMAGE}
+    container_name: zoo-navigator
+    restart: unless-stopped
+    network_mode: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      HTTP_PORT: ${ZOONAVIGATOR_PORT}
+      CONNECTION_DOLPHINSCHEDULER_NAME: ${ZOOKEEPER_CONNECTION_NAME}
+      CONNECTION_DOLPHINSCHEDULER_CONN: ${ZOOKEEPER_CONNECTION_STRING}
+      AUTO_CONNECT_CONNECTION_ID: DOLPHINSCHEDULER

@@ -1,4 +1,4 @@
-  
+name: localhost  
 
 services:  
   mongo:  
@@ -12,9 +12,4 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     restart: always
-    networks:
-      - mongo
-
-networks:
-  mongo:
-    driver: bridge
+    

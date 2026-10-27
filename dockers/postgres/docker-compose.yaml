@@ -1,3 +1,5 @@
+name: localhost
+
 services:
   postgres:
     container_name: postgres_container
@@ -13,8 +15,4 @@ services:
       - "5432:5432"
     networks:
       - postgres
-    restart: always
-
-networks:
-  postgres:
-    driver: bridge
+      

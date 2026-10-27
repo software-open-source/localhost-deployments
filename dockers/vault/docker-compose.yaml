@@ -1,4 +1,4 @@
-
+name: localhost
 
 services:
   vault:
@@ -24,7 +24,4 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-volumes:
-  vault_data:
-    driver: bridge
+      

@@ -1,4 +1,6 @@
-services:  
+name: localhost
+
+services:
   redis:  
     image: redis:${REDIS_VERSION:-latest}  
     container_name: ${REDIS_CONTAINER_NAME:-redis-server}  
@@ -13,6 +15,4 @@ services:
     networks:  
       - redis
     restart: always
-
-networks:  
-  redis:
+    

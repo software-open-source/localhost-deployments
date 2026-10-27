@@ -1,3 +1,4 @@
+name: localhost
 # https://github.com/LibreTranslate/
 
 services:
@@ -26,9 +27,4 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    networks:
-      - libretranslate
-
-networks:
-  libretranslate:
-    driver: bridge
+              

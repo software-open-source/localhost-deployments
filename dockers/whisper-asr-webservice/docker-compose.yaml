@@ -1,0 +1,26 @@
+name: localhost
+
+services:
+  whisper-asr:
+    image: onerahmet/openai-whisper-asr-webservice:latest-gpu
+    container_name: whisper-asr-webservice
+
+    ports:
+      - "${HOST_PORT:-9000}:${CONTAINER_PORT:-9000}"
+
+    environment:
+      - ASR_MODEL=${ASR_MODEL:-base}
+      - ASR_ENGINE=${ASR_ENGINE:-openai_whisper}
+
+    volumes:
+      - ${CACHE_DIR:-./cache}:/root/.cache
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    restart: unless-stopped
